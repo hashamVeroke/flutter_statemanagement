@@ -23,7 +23,7 @@ class _SplashViewState extends State<SplashView>
     // Listen for animation complete
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        context.replace('/onboarding'); // GoRouter navigation
+        context.go('/onboarding'); // GoRouter navigation
       }
     });
   }
