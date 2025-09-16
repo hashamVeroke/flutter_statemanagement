@@ -1,7 +1,8 @@
 import 'package:bloc_example/bloc/counter_bloc.dart';
-import 'package:bloc_example/inc_dec_page.dart';
+import 'package:bloc_example/modules/home/inc_dec_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key, required this.title});
@@ -32,9 +33,7 @@ class MyHomePage extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.of(
-          context,
-        ).push(MaterialPageRoute(builder: (context) => IncDecPage())),
+        onPressed: () => context.go('/details'),
         tooltip: 'Increment',
         child: const Icon(Icons.navigate_next),
       ),

@@ -1,6 +1,7 @@
+import 'package:bloc_example/core/router/app_router.dart';
 import 'package:bloc_example/bloc/counter_bloc.dart';
 import 'package:bloc_example/cubit/counter_cubit.dart';
-import 'package:bloc_example/home_page.dart';
+import 'package:bloc_example/modules/home/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,12 +19,12 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => CounterCubit()),
         BlocProvider(create: (_) => CounterBloc()),
       ],
-      child: MaterialApp(
+      child: MaterialApp.router(
         title: 'Flutter Demo',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         ),
-        home: const MyHomePage(title: 'Flutter Demo Home Page'),
+       routerConfig: AppRouter.router,
       ),
     );
   }
