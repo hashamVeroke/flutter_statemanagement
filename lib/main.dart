@@ -1,7 +1,6 @@
 import 'package:bloc_example/core/router/app_router.dart';
 import 'package:bloc_example/bloc/counter_bloc.dart';
 import 'package:bloc_example/cubit/counter_cubit.dart';
-import 'package:bloc_example/modules/home/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -25,6 +24,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         ),
        routerConfig: AppRouter.router,
+       debugShowCheckedModeBanner: false,
       ),
     );
   }
