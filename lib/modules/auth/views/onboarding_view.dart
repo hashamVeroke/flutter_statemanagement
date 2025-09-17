@@ -1,6 +1,10 @@
+import 'package:bloc_example/utils/shared_widgets/buttons/language_button.dart';
+import 'package:bloc_example/utils/ui_util/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+
+import '../../../core/network/base_client.dart';
 
 class Onboarding extends StatefulWidget {
   const Onboarding({super.key});
@@ -12,25 +16,34 @@ class Onboarding extends StatefulWidget {
 class _OnboardingState extends State<Onboarding> {
   final PageController _controller = PageController();
   bool showPhoneField = false;
-  String selectedLang = "english".tr();
+  // String selectedLang = "english".tr();
 
   final List<Map<String, dynamic>> pages = [
     {
-      "color": Color(0xFFFF001F),
-      "title": "slide1_title".tr(),
+      "color": AppColors.primary,
+      "title": "slide1_title", // ❌ no .tr() here
       "image": Icons.shopping_bag,
     },
     {
-      "color": Color(0xFF148F96),
-      "title": "slide2_title".tr(),
+      "color": AppColors.blueChill,
+      "title": "slide2_title",
       "image": Icons.food_bank,
     },
     {
-      "color": Color(0xFFDFA20C),
-      "title": "slide3_title".tr(),
+      "color": AppColors.gamboge,
+      "title": "slide3_title",
       "image": Icons.flight_takeoff,
     },
   ];
+  void languageHandler(i) async {
+    print(i);
+    final locale = i == 0 ? const Locale('en') : const Locale('ar');
+    context.setLocale(locale);
+    await BaseClient.setLanguage(i == 0 ? 'en' : 'ar');
+    setState(() {
+      // selectedLang = i == 0 ? "english".tr() : "arabic".tr();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +55,9 @@ class _OnboardingState extends State<Onboarding> {
             controller: _controller,
             itemCount: pages.length,
             onPageChanged: (_) {
-              setState(() => showPhoneField = false); // reset when slide changes
+              setState(
+                () => showPhoneField = false,
+              ); // reset when slide changes
             },
             itemBuilder: (context, index) {
               final page = pages[index];
@@ -55,7 +70,9 @@ class _OnboardingState extends State<Onboarding> {
                       Icon(page["image"], size: 150, color: Colors.white),
                       const SizedBox(height: 30),
                       Text(
-                        page["title"],
+                        page["title"]
+                            .toString()
+                            .tr(), // ✅ translate at build time
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           color: Colors.white,
@@ -71,35 +88,7 @@ class _OnboardingState extends State<Onboarding> {
           ),
 
           // 🔹 Language Toggle (Absolute Top)
-          Positioned(
-            top: 50,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: ToggleButtons(
-                borderRadius: BorderRadius.circular(20),
-                isSelected: [
-                  context.locale.languageCode == 'en',
-                  context.locale.languageCode == 'ar'
-                ],
-                onPressed: (i) {
-                  final locale = i == 0 ? const Locale('en') : const Locale('ar');
-                  context.setLocale(locale);
-                  setState(() {
-                    selectedLang = i == 0 ? "english".tr() : "arabic".tr();
-                  });
-                },
-                children: [
-                  Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
-                      child: Text("english".tr())),
-                  Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
-                      child: Text("arabic".tr())),
-                ],
-              ),
-            ),
-          ),
+          LanguageButton(),
 
           // 🔹 Bottom controls (Absolute Bottom)
           Positioned(
