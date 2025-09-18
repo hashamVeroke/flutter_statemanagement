@@ -179,7 +179,7 @@ class _OnboardingState extends State<Onboarding> {
                           ),
                         ),
                       ),
-                      child: const Text('عربي', style: TextStyle(fontSize: 16)),
+                      child: const Text('العربية', style: TextStyle(fontSize: 16)),
                     ),
                   ],
                 ),
