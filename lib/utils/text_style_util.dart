@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 /// Utility class for common text styles in the app.
 class TextStyleUtil {
   // Font families
-  static const String _font = 'Roboto';
+  static const String _font = 'Urbanist';
 
   // Font sizes
   static const double _fs12 = 12.0;

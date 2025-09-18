@@ -1,7 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-
-import '../shared_widgets/network_loader.dart';
 
 class AppUtil {
   static bool isTestEnvironment = false;
@@ -47,33 +44,4 @@ class AppUtil {
     }
     return null;
   }
-
-  ///loader for the app
-  static void showLoader({
-    required BuildContext? context,
-    bool startLoad = true,
-    bool barrierDismissible = false,
-  }) {
-    if (context == null) return;
-
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      useRootNavigator: true,
-      builder: (context) {
-        return const PopScope(
-          canPop: false,
-          child: Center(
-            child: Stack(children: <Widget>[NetworkLoader()]),
-          ),
-        );
-      },
-    );
-  }
-
-  ///dismiss the loader if showing
-
-  /// Show a success popup
-
-  /// Show an error popup
 }

@@ -10,6 +10,7 @@ import '../../../core/network/base_client.dart';
 import '../../../utils/shared_widgets/app_loader.dart';
 import '../../../utils/shared_widgets/buttons/app_button.dart';
 import '../../../utils/shared_widgets/input_fields/phone_input.dart';
+import '../../../utils/text_style_util.dart';
 import '../cubit/auth_cubit.dart';
 import '../cubit/auth_states.dart';
 
@@ -45,6 +46,21 @@ class _OnboardingState extends State<Onboarding> {
     },
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final String code = context.locale.languageCode;
+      final int idx = code == 'ar' ? 1 : 0;
+      if (mounted) {
+        setState(() {
+          selectedLanguageIndex = idx;
+        });
+      }
+      await BaseClient.setLanguage(code);
+    });
+  }
+
   void languageHandler(i) async {
     final locale = i == 0 ? const Locale('en') : const Locale('ar');
     context.setLocale(locale);
@@ -65,6 +81,7 @@ class _OnboardingState extends State<Onboarding> {
       isStarted = true;
     });
   }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -139,10 +156,8 @@ class _OnboardingState extends State<Onboarding> {
                               Text(
                                 page["title"].toString().tr(),
                                 textAlign: TextAlign.center,
-                                style: const TextStyle(
+                                style: TextStyleUtil.semiBold30.copyWith(
                                   color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ],
@@ -187,9 +202,13 @@ class _OnboardingState extends State<Onboarding> {
                                 ),
                               ),
                             ),
-                            child: const Text(
+                            child: Text(
                               'English',
-                              style: TextStyle(fontSize: 16),
+                              style: TextStyleUtil.medium16.copyWith(
+                                color: selectedLanguageIndex == 0
+                                    ? Colors.white
+                                    : Colors.black,
+                              ),
                             ),
                           ),
                           TextButton(
@@ -218,9 +237,13 @@ class _OnboardingState extends State<Onboarding> {
                                 ),
                               ),
                             ),
-                            child: const Text(
+                            child: Text(
                               'العربية',
-                              style: TextStyle(fontSize: 16),
+                              style: TextStyleUtil.medium16.copyWith(
+                                color: selectedLanguageIndex == 1
+                                    ? Colors.white
+                                    : Colors.black,
+                              ),
                             ),
                           ),
                         ],
