@@ -11,26 +11,17 @@ class AuthRepoImpl implements AuthRepo {
   Future<CheckPhoneExistResponse> checkPhoneExist({
     required String phone,
   }) async {
-    try {
-      final response = await _baseClient.post(
-        ApiEndpoints.checkPhoneExist,
-        data: {
-          'phone': phone,
-        },
-      );
+    final response = await _baseClient.post(
+      ApiEndpoints.checkPhoneExist,
+      data: {'phone': phone},
+    );
 
-      final dynamic body = response.data;
-      final Map<String, dynamic> jsonMap =
-          body is Map<String, dynamic> ? body : json.decode(body as String) as Map<String, dynamic>;
+    final dynamic body = response.data;
+    final Map<String, dynamic> jsonMap = body is Map<String, dynamic>
+        ? body
+        : json.decode(body as String) as Map<String, dynamic>;
 
-      return CheckPhoneExistResponse.fromJson(jsonMap);
-    } catch (e) {
-      return CheckPhoneExistResponse.error(
-        message: 'Failed to check phone',
-        error: e.toString(),
-        status: 500,
-      );
-    }
+    return CheckPhoneExistResponse.fromJson(jsonMap);
   }
 
   @override
