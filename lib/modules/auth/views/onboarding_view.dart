@@ -32,17 +32,17 @@ class _OnboardingState extends State<Onboarding> {
     {
       "color": Color(0xFFFF001F),
       "title": "slide1_title",
-      "image": Icons.shopping_bag,
+      "asset": 'assets/png/slide1.png',
     },
     {
       "color": Color(0xFF148F96),
       "title": "slide2_title",
-      "image": Icons.food_bank,
+      "asset": 'assets/png/slide2.png',
     },
     {
       "color": Color(0xFFDFA20C),
       "title": "slide3_title",
-      "image": Icons.flight_takeoff,
+      "asset": 'assets/png/slide3.png',
     },
   ];
 
@@ -81,7 +81,6 @@ class _OnboardingState extends State<Onboarding> {
       isStarted = true;
     });
   }
-  
 
   @override
   Widget build(BuildContext context) {
@@ -146,13 +145,24 @@ class _OnboardingState extends State<Onboarding> {
                         child: Center(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Icon(
-                                page["image"],
-                                size: 150,
-                                color: Colors.white,
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: index == 0
+                                    ? Image.asset(
+                                        page["asset"],
+                                        width: 200,
+                                        height: 200,
+                                        fit: BoxFit.contain,
+                                      )
+                                    : Image.asset(
+                                        page["asset"],
+                                        width: double.infinity,
+                                        fit: BoxFit.fitWidth,
+                                      ),
                               ),
-                              const SizedBox(height: 30),
+                              const SizedBox(height: 10),
                               Text(
                                 page["title"].toString().tr(),
                                 textAlign: TextAlign.center,
