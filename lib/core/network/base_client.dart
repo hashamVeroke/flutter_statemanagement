@@ -28,12 +28,15 @@ class BaseClient {
 
   /// Create and configure Dio instance
   Dio _createDio() {
+    print(AppEnv.baseUrl);
     final dio = Dio(
       BaseOptions(
         baseUrl: AppEnv.baseUrl,
         connectTimeout: Duration(milliseconds: AppEnv.apiTimeout),
         receiveTimeout: Duration(milliseconds: AppEnv.apiTimeout),
         sendTimeout: Duration(milliseconds: AppEnv.apiTimeout),
+        // Do not throw exceptions for non-2xx so callers can handle (e.g. 404 new user)
+        validateStatus: (int? status) => true,
       ),
     );
 
@@ -104,6 +107,7 @@ class BaseClient {
         onReceiveProgress: onReceiveProgress,
       );
     } catch (e) {
+      print(e);
       throw NetworkException.fromDioError(e);
     }
   }
