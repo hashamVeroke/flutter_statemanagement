@@ -6,11 +6,13 @@ class AppButton extends StatelessWidget {
   final String title;
   final VoidCallback onPressed;
   final Color? color;
+  final bool disabled;
   const AppButton({
     super.key,
     required this.title,
     required this.onPressed,
     this.color,
+    this.disabled = false,
   });
 
   @override
@@ -18,17 +20,20 @@ class AppButton extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       height: 60,
-      child: ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: color ?? AppColors.primary,
-          foregroundColor: AppColors.white,
-          textStyle: TextStyleUtil.semiBold18,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+      child: Opacity(
+        opacity: disabled ? 0.8 : 1.0,
+        child: ElevatedButton(
+          onPressed: disabled ? null : onPressed,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: color ?? AppColors.primary,
+            foregroundColor: AppColors.white,
+            textStyle: TextStyleUtil.semiBold18,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
           ),
+          child: Text(title),
         ),
-        child: Text(title),
       ),
     );
   }

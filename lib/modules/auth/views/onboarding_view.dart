@@ -2,9 +2,7 @@ import 'package:bloc_example/utils/ui_util/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:flutter/services.dart';
-
 import '../../../core/network/base_client.dart';
 import '../../../utils/shared_widgets/buttons/app_button.dart';
 import '../../../utils/shared_widgets/input_fields/phone_input.dart';
@@ -19,16 +17,9 @@ class Onboarding extends StatefulWidget {
 class _OnboardingState extends State<Onboarding> {
   final PageController _controller = PageController();
   bool isStarted = false;
-  int selectedIndex = 0;
-  String selectedLang = "english".tr();
-  ({
-    PhoneNumber number,
-    String? isoCode,
-    String? dialCode,
-    String? countryName,
-  })?
-  phoneData;
+  int selectedLanguageIndex = 0;
   int currentPage = 0;
+  Map<String, dynamic>? phoneData;
 
   final List<Map<String, dynamic>> pages = [
     {
@@ -52,8 +43,7 @@ class _OnboardingState extends State<Onboarding> {
     context.setLocale(locale);
     await BaseClient.setLanguage(i == 0 ? 'en' : 'ar');
     setState(() {
-      selectedLang = i == 0 ? "english".tr() : "arabic".tr();
-      selectedIndex = i;
+      selectedLanguageIndex = i;
     });
   }
 
@@ -135,25 +125,25 @@ class _OnboardingState extends State<Onboarding> {
                     TextButton(
                       onPressed: () => languageHandler(0),
                       style: TextButton.styleFrom(
-                        backgroundColor: selectedIndex == 0
+                        backgroundColor: selectedLanguageIndex == 0
                             ? AppColors.black
                             : Colors.white,
-                        foregroundColor: selectedIndex == 0
+                        foregroundColor: selectedLanguageIndex == 0
                             ? Colors.white
                             : Colors.black,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(
-                              selectedIndex == 0 ? 20 : 0,
+                              selectedLanguageIndex == 0 ? 20 : 0,
                             ),
                             bottomLeft: Radius.circular(
-                              selectedIndex == 0 ? 20 : 0,
+                              selectedLanguageIndex == 0 ? 20 : 0,
                             ),
                             topRight: Radius.circular(
-                              selectedIndex == 0 ? 0 : 20,
+                              selectedLanguageIndex == 0 ? 0 : 20,
                             ),
                             bottomRight: Radius.circular(
-                              selectedIndex == 0 ? 0 : 20,
+                              selectedLanguageIndex == 0 ? 0 : 20,
                             ),
                           ),
                         ),
@@ -166,25 +156,25 @@ class _OnboardingState extends State<Onboarding> {
                     TextButton(
                       onPressed: () => languageHandler(1),
                       style: TextButton.styleFrom(
-                        backgroundColor: selectedIndex == 1
+                        backgroundColor: selectedLanguageIndex == 1
                             ? AppColors.black
                             : Colors.white,
-                        foregroundColor: selectedIndex == 1
+                        foregroundColor: selectedLanguageIndex == 1
                             ? Colors.white
                             : Colors.black,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.only(
                             topRight: Radius.circular(
-                              selectedIndex == 1 ? 0 : 20,
+                              selectedLanguageIndex == 1 ? 0 : 20,
                             ),
                             bottomRight: Radius.circular(
-                              selectedIndex == 1 ? 0 : 20,
+                              selectedLanguageIndex == 1 ? 0 : 20,
                             ),
                             topLeft: Radius.circular(
-                              selectedIndex == 1 ? 20 : 0,
+                              selectedLanguageIndex == 1 ? 20 : 0,
                             ),
                             bottomLeft: Radius.circular(
-                              selectedIndex == 1 ? 20 : 0,
+                              selectedLanguageIndex == 1 ? 20 : 0,
                             ),
                           ),
                         ),
@@ -222,7 +212,12 @@ class _OnboardingState extends State<Onboarding> {
                           hintText: "enter_phone_number".tr(),
                           onChanged: (payload) {
                             setState(() {
-                              phoneData = payload;
+                              phoneData = {
+                                "phoneNumber": payload.phoneNumber,
+                                "countryCode": payload.countryCode,
+                                "country": payload.country,
+                                "isPhoneValid": payload.isPhoneValid,
+                              };
                             });
                             // payload.number.phoneNumber (E.164), payload.isoCode, payload.dialCode, payload.countryName
                           },
@@ -248,6 +243,9 @@ class _OnboardingState extends State<Onboarding> {
                         child: MediaQuery.of(context).viewInsets.bottom == 0
                             ? AppButton(
                                 key: const ValueKey('cta-visible'),
+                                disabled:
+                                    !(phoneData?['isPhoneValid'] ?? false) &&
+                                    isStarted,
                                 title: isStarted
                                     ? "continue".tr()
                                     : "get_started".tr(),
